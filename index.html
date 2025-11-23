@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <!-- Blobs removed via CSS but kept in DOM just in case, or we can remove them. Let's keep structure simple. -->
+    </div>
+
+    <div class="calculator-container">
+        <div class="screen">
+            <div class="history" id="history-display"></div>
+            <input type="text" class="current-expression" id="display" placeholder="0" readonly>
+        </div>
+
+        <div class="controls">
+            <div class="mode-switch">
+                <label class="switch">
+                    <input type="checkbox" id="graph-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span>Graph</span>
+            </div>
+            <button id="btn-open-converter" class="icon-btn" title="Unit Converter">⇄</button>
+            <div class="angle-mode">
+                <button id="btn-deg" class="active">DEG</button>
+                <button id="btn-rad">RAD</button>
+            </div>
+        </div>
+
+        <div class="keypad">
+            <!-- Row 1 -->
+            <button class="btn fn" data-val="sin(">sin</button>
+            <button class="btn fn" data-val="cos(">cos</button>
+            <button class="btn fn" data-val="tan(">tan</button>
+            <button class="btn clear" id="btn-clear">AC</button>
+            <button class="btn delete" id="btn-delete">DEL</button>
+
+            <!-- Row 2 -->
+            <button class="btn fn" data-val="asin(">sin⁻¹</button>
+            <button class="btn fn" data-val="acos(">cos⁻¹</button>
+            <button class="btn fn" data-val="atan(">tan⁻¹</button>
+            <button class="btn fn" data-val="%">%</button>
+            <button class="btn op" data-val="/">÷</button>
+
+            <!-- Row 3 -->
+            <button class="btn fn" data-val="ln(">ln</button>
+            <button class="btn fn" data-val="log(">log</button>
+            <button class="btn num" data-val="7">7</button>
+            <button class="btn num" data-val="8">8</button>
+            <button class="btn num" data-val="9">9</button>
+            <button class="btn op" data-val="*">×</button>
+
+            <!-- Row 4 -->
+            <button class="btn fn" data-val="sqrt(">√</button>
+            <button class="btn fn" data-val="^">^</button>
+            <button class="btn num" data-val="4">4</button>
+            <button class="btn num" data-val="5">5</button>
+            <button class="btn num" data-val="6">6</button>
+            <button class="btn op" data-val="-">-</button>
+
+            <!-- Row 5 -->
+            <button class="btn fn" data-val="PI">π</button>
+            <button class="btn fn" data-val="E">e</button>
+            <button class="btn num" data-val="1">1</button>
+            <button class="btn num" data-val="2">2</button>
+            <button class="btn num" data-val="3">3</button>
+            <button class="btn op" data-val="+">+</button>
+
+            <!-- Row 6 -->
+            <button class="btn fn" data-val="(">(</button>
+            <button class="btn fn" data-val=")">)</button>
+            <button class="btn fn" data-val="abs(">|x|</button>
+            <button class="btn num" data-val="0">0</button>
+            <button class="btn num" data-val=".">.</button>
+            <button class="btn equal" id="btn-equal">=</button>
+        </div>
+    </div>
+
+    <div class="graph-container hidden" id="graph-container">
+        <canvas id="graph-canvas"></canvas>
+        <div class="graph-controls">
+            <button id="btn-close-graph" class="primary-btn">Close</button>
+            <input type="text" id="graph-function" placeholder="f(x) = sin(x)">
+            <button id="btn-plot" class="primary-btn">Plot</button>
+        </div>
+    </div>
+
+    <div class="converter-container hidden" id="converter-container">
+        <div class="converter-box">
+            <h2>Unit Converter</h2>
+            <div class="converter-controls">
+                <select id="converter-category">
+                    <option value="length">Length</option>
+                    <option value="mass">Mass</option>
+                    <option value="temp">Temperature</option>
+                    <option value="data">Data</option>
+                </select>
+                <button id="btn-close-converter">×</button>
+            </div>
+
+            <div class="converter-inputs">
+                <div class="input-group">
+                    <input type="number" id="convert-from-val" placeholder="0">
+                    <select id="convert-from-unit"></select>
+                </div>
+                <div class="icon">↓</div>
+                <div class="input-group">
+                    <input type="number" id="convert-to-val" readonly>
+                    <select id="convert-to-unit"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="calculator.js"></script>
+    <script src="graph.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

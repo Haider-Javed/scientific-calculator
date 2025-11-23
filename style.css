@@ -1,0 +1,389 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap');
+
+:root {
+    --bg-app: #121212;
+    --bg-calc: #1e1e1e;
+    --bg-screen: #000000;
+    --btn-num: #2d2d2d;
+    --btn-fn: #383838;
+    --btn-op: #ff9f0a;
+    /* Apple-style orange */
+    --btn-op-hover: #ffb340;
+    --btn-danger: #ff453a;
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
+    --text-dark: #000000;
+    --shadow-calc: 0 20px 50px rgba(0, 0, 0, 0.5);
+    --radius-btn: 50%;
+    /* Round buttons */
+    --radius-calc: 30px;
+    --gap: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    /* Align to top so scrolling works better */
+    min-height: 100vh;
+    overflow-y: auto;
+    /* Allow scrolling */
+    padding: 20px 0;
+    /* Add some vertical spacing */
+}
+
+/* Remove blobs, use a subtle gradient instead */
+.background-blobs {
+    display: none;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    /* Keep background fixed */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 10%, #2c2c2c 0%, #121212 60%);
+    z-index: -1;
+}
+
+/* Calculator Body */
+.calculator-container {
+    background-color: var(--bg-calc);
+    border-radius: var(--radius-calc);
+    box-shadow: var(--shadow-calc);
+    padding: 25px;
+    width: 100%;
+    max-width: 380px;
+    /* Standard width */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Remove max-height to allow content to dictate height */
+    margin: auto;
+}
+
+/* Screen */
+.screen {
+    background-color: var(--bg-screen);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    min-height: 120px;
+    margin-bottom: 10px;
+}
+
+.history {
+    color: var(--text-dim);
+    font-size: 1rem;
+    min-height: 1.5rem;
+    margin-bottom: 5px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.current-expression {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 2.5rem;
+    text-align: right;
+    width: 100%;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+}
+
+/* Controls (Graph Toggle etc) */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #444;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--btn-op);
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+/* Angle Mode Buttons */
+.angle-mode {
+    background: #2d2d2d;
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;
+}
+
+.angle-mode button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.angle-mode button.active {
+    background: #444;
+    color: var(--text-main);
+}
+
+/* Icon Button */
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--text-main);
+}
+
+/* Keypad */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 columns for scientific */
+    gap: var(--gap);
+}
+
+.btn {
+    aspect-ratio: 1;
+    /* Make them perfect circles/squares */
+    border: none;
+    border-radius: var(--radius-btn);
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Button Colors */
+.btn.num {
+    background-color: var(--btn-num);
+}
+
+.btn.num:hover {
+    filter: brightness(1.2);
+}
+
+.btn.fn {
+    background-color: var(--btn-fn);
+    font-size: 0.9rem;
+}
+
+.btn.fn:hover {
+    filter: brightness(1.2);
+}
+
+.btn.op {
+    background-color: var(--btn-op);
+    color: var(--text-dark);
+    /* Dark text on orange */
+    font-size: 1.3rem;
+}
+
+.btn.op:hover {
+    background-color: var(--btn-op-hover);
+}
+
+.btn.clear,
+.btn.delete {
+    background-color: var(--btn-danger);
+    /* Red/Orange for clear */
+    color: #fff;
+}
+
+.btn.clear:hover,
+.btn.delete:hover {
+    filter: brightness(1.1);
+}
+
+.btn.equal {
+    background-color: var(--btn-op);
+    color: var(--text-dark);
+    grid-column: span 1;
+    /* Keep it uniform */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 400px) {
+    .calculator-container {
+        padding: 15px;
+        border-radius: 0;
+        height: 100vh;
+        max-height: none;
+        max-width: none;
+    }
+
+    .keypad {
+        gap: 8px;
+    }
+
+    .btn {
+        font-size: 1rem;
+    }
+}
+
+/* Graph & Converter Overlays */
+.graph-container,
+.converter-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #121212;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.graph-container.hidden,
+.converter-container.hidden {
+    display: none;
+}
+
+canvas {
+    flex: 1;
+    background: #000;
+    border-radius: 12px;
+    border: 1px solid #333;
+    margin-bottom: 10px;
+}
+
+.graph-controls,
+.converter-controls {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    background: #2d2d2d;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    flex: 1;
+    outline: none;
+}
+
+button.primary-btn {
+    background: var(--btn-op);
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Converter Specifics */
+.converter-box {
+    background: var(--bg-calc);
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin: auto;
+    width: 100%;
+}
+
+.converter-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-main);
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.icon {
+    text-align: center;
+    color: var(--btn-op);
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
